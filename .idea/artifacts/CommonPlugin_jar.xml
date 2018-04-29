@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CommonPlugin:jar">
+    <output-path>$PROJECT_DIR$/plugins</output-path>
+    <root id="archive" name="CommonPlugin.jar">
+      <element id="module-output" name="CommonPlugin" />
+    </root>
+  </artifact>
+</component>

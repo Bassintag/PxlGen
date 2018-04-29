@@ -1,0 +1,11 @@
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# IntelliJ
+out/
+
+# Plugins build folder
+plugins/

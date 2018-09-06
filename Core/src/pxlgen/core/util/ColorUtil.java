@@ -11,6 +11,24 @@ import java.awt.*;
  */
 public final class ColorUtil {
 
+    public static Color blend(Color[] colors) {
+        int nonNull = 0;
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        for (Color color : colors) {
+            if (color == null)
+                continue;
+            nonNull += 1;
+            r += color.getRed();
+            g += color.getGreen();
+            b += color.getBlue();
+        }
+        if (nonNull == 0)
+            return null;
+        return new Color(r / nonNull, g / nonNull, b / nonNull);
+    }
+
     public static Color blend(Color color1, Color color2) {
         if (color1 == null)
             return color2;

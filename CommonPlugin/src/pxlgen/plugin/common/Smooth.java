@@ -21,19 +21,21 @@ public class Smooth {
     public void smooth(ImageBuffer imageBuffer, float threshold, float radius) {
         int radiusI = (int) radius;
         int thresholdI = (int) threshold;
-        ImageBuffer tmp = new ImageBuffer(imageBuffer);
+        int size = radiusI * 2 + 1;
+        ImageBuffer tmp = imageBuffer.clone();
         tmp.eachPixel((c, x, y) -> {
             int count = 0;
-            Color average = null;
+            Color[] colors = new Color[size * size];
+            int i = 0;
             for (int rx = x - radiusI; rx <= x + radiusI; rx += 1) {
                 for (int ry = y - radiusI; ry <= y + radiusI; ry += 1) {
-                    Color color = imageBuffer.getAt(rx, ry);
-                    if (color != null)
+                    colors[i] = imageBuffer.getAt(rx, ry);
+                    if (colors[i] != null)
                         count += 1;
-                    average = ColorUtil.blend(average, color);
+                    i += 1;
                 }
             }
-            return count >= thresholdI ? average : null;
+            return count >= thresholdI ? ColorUtil.blend(colors) : c;
         });
         imageBuffer.setFrom(tmp);
     }

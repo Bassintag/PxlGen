@@ -19,7 +19,6 @@ import java.io.*;
 public class Main extends JFrame {
 
     private JTextField     inputField;
-    private JTextArea      historyTextArea;
     private ImageComponent imageComponent;
 
     private final Pxlgen app;
@@ -55,32 +54,30 @@ public class Main extends JFrame {
         });
         add(inputField, BorderLayout.SOUTH);
 
-        historyTextArea = new JTextArea();
-        historyTextArea.setEditable(false);
-        historyTextArea.setText("History >> ");
-//        add(historyTextArea, BorderLayout.WEST);
-
         imageComponent = new ImageComponent(app);
         imageComponent.refreshImage();
         add(imageComponent, BorderLayout.CENTER);
 
-        loadScript();
+        new Thread(this::loadScript).start();
     }
 
     private void loadScript() {
-        File file = new File("script.aled");
+        File file = new File("scripts/script.aled");
         try {
             FileReader fileReader = new FileReader(file);
             BufferedReader reader = new BufferedReader(fileReader);
             String line;
             while ((line = reader.readLine()) != null) {
+                if (line.length() == 0)
+                    continue;
                 app.run(line);
+                imageComponent.refreshImage();
+                Thread.sleep(200);
             }
-            imageComponent.refreshImage();
             fileReader.close();
         } catch (InvalidCommandException e) {
             System.out.println("Invalid command: " + e.getMessage());
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

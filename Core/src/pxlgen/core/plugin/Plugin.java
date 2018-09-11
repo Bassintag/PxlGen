@@ -4,6 +4,7 @@ import pxlgen.core.exception.InvalidFunctionHandler;
 import pxlgen.core.function.Function;
 import pxlgen.core.function.FunctionHandler;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -31,13 +32,14 @@ public class Plugin {
     public Plugin(String path) throws IOException, ClassNotFoundException, InvalidFunctionHandler {
         JarFile jarFile = new JarFile(path);
         Enumeration<JarEntry> entries = jarFile.entries();
-
         URLClassLoader urlClassLoader = URLClassLoader.newInstance(
                 new URL[]{new URL("file:/" + path)},
                 getClass().getClassLoader());
-
         functionHandlers = new ArrayList<>();
-
+        String fileName = new File(path).getName();
+        int pos = fileName.lastIndexOf('.');
+        fileName = fileName.substring(0, pos);
+        System.out.println("FILE NAME: " + fileName);
         while (entries.hasMoreElements()) {
             JarEntry entry = entries.nextElement();
             if (entry.isDirectory() || !entry.getName().endsWith(".class"))
@@ -47,7 +49,7 @@ public class Plugin {
             System.out.println("Loading class: '" + entry.getName() + "'");
             Class c = urlClassLoader.loadClass(className);
             if (c.getAnnotation(pxlgen.core.annotation.FunctionHandler.class) != null) {
-                FunctionHandler functionHandler = new FunctionHandler(c);
+                FunctionHandler functionHandler = new FunctionHandler(c, fileName);
                 functionHandlers.add(functionHandler);
             }
         }

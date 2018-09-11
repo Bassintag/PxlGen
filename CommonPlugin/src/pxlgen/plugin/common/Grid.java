@@ -33,6 +33,8 @@ public class Grid {
     public void grid(ImageBuffer imageBuffer, float widthF, float heightF, float borderProb, float fillProb) {
         int width = (int) widthF;
         int height = (int) heightF;
+        if (width <= 0 || height <= 0)
+            return;
         Random random = new Random();
         for (int y = 0; y < imageBuffer.getHeight(); y += height - 1) {
             for (int x = 0; x < imageBuffer.getWidth(); x += width - 1) {

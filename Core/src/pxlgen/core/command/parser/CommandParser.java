@@ -83,7 +83,12 @@ public class CommandParser {
 
     private Command command() throws CommandParsingException {
         String label = expect(CommandTokenType.IDENTIFIER);
-        Command command = new Command(label);
+        String domain = null;
+        if (found(CommandTokenType.DOT)) {
+            domain = label;
+            label = expect(CommandTokenType.IDENTIFIER);
+        }
+        Command command = new Command(label, domain);
         expect(CommandTokenType.LPAR);
         while (!found(CommandTokenType.RPAR)) {
             if (token.getType() == CommandTokenType.IDENTIFIER)

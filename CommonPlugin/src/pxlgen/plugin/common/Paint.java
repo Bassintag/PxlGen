@@ -18,7 +18,7 @@ import java.awt.*;
 public class Paint {
 
     @Function
-    public void paint(ImageBuffer buffer, Float red, Float green, Float blue) {
+    public void paint(ImageBuffer buffer, float red, float green, float blue) {
         Color c = new Color(red, green, blue);
         buffer.eachPixel((color) -> (c), false);
     }

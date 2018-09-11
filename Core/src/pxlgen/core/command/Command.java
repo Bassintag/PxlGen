@@ -14,12 +14,19 @@ import java.util.List;
  */
 public class Command {
 
+    private final String domain;
+
     private final String name;
 
     private List<Object> params;
 
     public Command(String name) {
+        this(name, null);
+    }
+
+    public Command(String name, String domain) {
         this.name = name;
+        this.domain = domain;
         params = new ArrayList<>();
     }
 
@@ -39,9 +46,16 @@ public class Command {
         return params.size();
     }
 
+    public String getDomain() {
+        return domain;
+    }
+
     @Override
     public String toString() {
-        StringBuilder ret = new StringBuilder(name + "(");
+        StringBuilder ret = new StringBuilder();
+        if (domain != null)
+            ret.append(domain).append(".");
+        ret.append(name).append("(");
         for (int i = 0; i < params.size(); i += 1) {
             if (i > 0)
                 ret.append(", ");

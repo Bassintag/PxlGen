@@ -30,6 +30,10 @@ public class Pxlgen {
         this(64, 64);
     }
 
+    public Pxlgen(int size) {
+        this(size, size);
+    }
+
     public Pxlgen(int width, int height) {
         image = new ImageBuffer(width, height);
         plugins = new ArrayList<>();
@@ -85,14 +89,17 @@ public class Pxlgen {
             throw new UnknownCommandException(command.getName());
         FunctionCall functionCall = command.toFunctionCall();
         for (Function f : functions) {
+            if (command.getDomain() != null && !f.getDomain().equals(command.getDomain()))
+                continue;
             if (f.isCalleableBy(functionCall)) {
                 try {
                     f.run(image, functionCall.getParams());
                 } catch (InvocationTargetException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
-                break;
+                return;
             }
         }
+        throw new NoMatchingDefinitionException(command);
     }
 }

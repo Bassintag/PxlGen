@@ -13,7 +13,8 @@ public class FunctionCall {
 
     private final Object[] params;
 
-    public FunctionCall(String name, Object[] params) {
+    public FunctionCall(String name, Object[] params)
+    {
         this.name = name;
         this.params = params;
     }

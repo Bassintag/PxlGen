@@ -11,15 +11,13 @@ import java.awt.*;
  */
 public class ImageBuffer {
 
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
 
     private Color[] buffer;
 
     public ImageBuffer(int width, int height) {
-        this.width = width;
-        this.height = height;
-        buffer = new Color[width * height];
+        resize(width, height);
     }
 
     public ImageBuffer(int width, int height, Color[] buffer) {
@@ -28,15 +26,19 @@ public class ImageBuffer {
         System.arraycopy(buffer, 0, this.buffer, 0, len);
     }
 
+    public void resize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        buffer = new Color[width * height];
+    }
+
     public ImageBuffer(ImageBuffer imageBuffer) {
         this(imageBuffer.width, imageBuffer.height, imageBuffer.buffer);
     }
 
-    public boolean setFrom(ImageBuffer buffer) {
-        if (buffer.getWidth() != width || buffer.getHeight() != height)
-            return false;
+    public void setFrom(ImageBuffer buffer) {
+        resize(buffer.getWidth(), buffer.getHeight());
         eachPixel(((color, x, y) -> (buffer.getAt(x, y))));
-        return true;
     }
 
     public boolean isInBounds(int x, int y) {
@@ -56,6 +58,17 @@ public class ImageBuffer {
     public void setAt(Color color, int x, int y) {
         if (isInBounds(x, y))
             buffer[y * width + x] = color;
+    }
+
+    public void drawBorderRect(Color color, int startX, int startY, int endX, int endY) {
+        for (int y = startY; y < endY; y += 1) {
+            setAt(color, startX, y);
+            setAt(color, endX - 1, y);
+        }
+        for (int x = startX; x < endX; x += 1) {
+            setAt(color, x, startY);
+            setAt(color, x, endY - 1);
+        }
     }
 
     public void drawRect(Color color, int startX, int startY, int endX, int endY) {

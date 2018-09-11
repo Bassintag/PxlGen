@@ -18,7 +18,7 @@ public class FunctionHandler {
 
     private List<Function> functions;
 
-    public FunctionHandler(Class<?> c) throws InvalidFunctionHandler {
+    public FunctionHandler(Class<?> c, String domain) throws InvalidFunctionHandler {
         Object instance;
         try {
             instance = c.getConstructor().newInstance();
@@ -32,7 +32,7 @@ public class FunctionHandler {
                 String name = annotation.name();
                 if (name.length() == 0)
                     name = m.getName();
-                functions.add(new Function(instance, name, m));
+                functions.add(new Function(instance, domain, name, m));
             }
         }
     }

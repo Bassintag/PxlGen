@@ -17,6 +17,7 @@ public enum CommandTokenType {
     NUMBER("-?\\d+(\\.\\d+)?"),
     STRING("\\\"\\w*\\\""),
     COMMA(","),
+    DOT("\\."),
     SPACE("\\s+", true),
     EOF("$");
 

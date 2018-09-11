@@ -19,7 +19,9 @@ import java.util.List;
  */
 public class Function {
 
-    private String name;
+    private final String domain;
+
+    private final String name;
 
     private final Method run;
 
@@ -27,7 +29,8 @@ public class Function {
 
     private final Object instance;
 
-    public Function(Object instance, String name, Method run) {
+    public Function(Object instance, String domain, String name, Method run) {
+        this.domain = domain;
         this.instance = instance;
         this.name = name;
         this.run = run;
@@ -53,6 +56,10 @@ public class Function {
         paramsBuffer.add(buffer);
         Collections.addAll(paramsBuffer, params);
         run.invoke(instance, paramsBuffer.toArray());
+    }
+
+    public String getDomain() {
+        return domain;
     }
 
     public String getName() {

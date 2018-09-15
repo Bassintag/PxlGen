@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 import java.awt.*;
@@ -17,8 +18,9 @@ import java.util.Random;
 @FunctionHandler
 public class Noise {
 
-    @Function
-    public void noise(ImageBuffer imageBuffer, float probability) {
+    @Function(description = "Clears random pixels based on a probability")
+    public void noise(ImageBuffer imageBuffer,
+                      @Name("probability") float probability) {
         Random random = new Random();
         imageBuffer.eachPixel((c) -> {
             if (c == null || random.nextFloat() < probability)
@@ -27,8 +29,12 @@ public class Noise {
         });
     }
 
-    @Function
-    public void noise(ImageBuffer imageBuffer, float probability, float r, float g, float b) {
+    @Function(description = "Changes random pixels to a color based on a probability")
+    public void noise(ImageBuffer imageBuffer,
+                      @Name("probability") float probability,
+                      @Name("red") float r,
+                      @Name("green") float g,
+                      @Name("blue") float b) {
         Random random = new Random();
         Color color = new Color(r, g, b);
         imageBuffer.eachPixel((c) -> {

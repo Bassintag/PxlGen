@@ -55,26 +55,31 @@ public class ImageBuffer {
         return getAt((int) (x * width), (int) (y * height));
     }
 
-    public void setAt(Color color, int x, int y) {
+    public void setAt(int x, int y, Color color) {
         if (isInBounds(x, y))
             buffer[y * width + x] = color;
     }
 
+    public void setAt(int x, int y, boolean b) {
+        if (isInBounds(x, y))
+            buffer[y * width + x] = b ? new Color(1f, 1f, 1f) : null;
+    }
+
     public void drawBorderRect(Color color, int startX, int startY, int endX, int endY) {
         for (int y = startY; y < endY; y += 1) {
-            setAt(color, startX, y);
-            setAt(color, endX - 1, y);
+            setAt(startX, y, color);
+            setAt(endX - 1, y, color);
         }
         for (int x = startX; x < endX; x += 1) {
-            setAt(color, x, startY);
-            setAt(color, x, endY - 1);
+            setAt(x, startY, color);
+            setAt(x, endY - 1, color);
         }
     }
 
     public void drawRect(Color color, int startX, int startY, int endX, int endY) {
         for (int y = startY; y < endY; y += 1) {
             for (int x = startX; x < endX; x += 1) {
-                setAt(color, x, y);
+                setAt(x, y, color);
             }
         }
     }
@@ -125,7 +130,7 @@ public class ImageBuffer {
                     Color ret = handler.handle(color, x, y);
                     if (ret != color && (ret == null || !ret.equals(color)))
                         count += 1;
-                    setAt(ret, x, y);
+                    setAt(x, y, ret);
                 }
             }
         }

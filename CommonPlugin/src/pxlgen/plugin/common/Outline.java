@@ -3,6 +3,7 @@ package pxlgen.plugin.common;
 import pxlgen.core.Direction;
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 /**
@@ -15,7 +16,7 @@ import pxlgen.core.image.ImageBuffer;
 @FunctionHandler
 public class Outline {
 
-    @Function
+    @Function(description = "Clears everything but the outlines of all areas")
     public void outline(ImageBuffer imageBuffer) {
         ImageBuffer tmp = imageBuffer.clone();
         tmp.eachPixel((c, x, y) -> {
@@ -29,8 +30,9 @@ public class Outline {
         imageBuffer.setFrom(tmp);
     }
 
-    @Function
-    public void outline(ImageBuffer imageBuffer, Direction direction) {
+    @Function(description = "Clears everything but the outlines of all areas in a direction")
+    public void outline(ImageBuffer imageBuffer,
+                        @Name("direction") Direction direction) {
         ImageBuffer tmp = imageBuffer.clone();
         boolean left = direction.getRelX() < 0;
         boolean right = direction.getRelX() > 0;

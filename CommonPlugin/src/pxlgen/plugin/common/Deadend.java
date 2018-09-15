@@ -14,7 +14,7 @@ import pxlgen.core.image.ImageBuffer;
 @FunctionHandler
 public class Deadend {
 
-    @Function
+    @Function(description = "Clears all the 1 space wide deadends")
     public void deadend(ImageBuffer imageBuffer) {
         int changed;
         do {

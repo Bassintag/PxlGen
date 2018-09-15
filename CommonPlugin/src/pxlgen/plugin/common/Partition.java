@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 import pxlgen.plugin.common.bsp.Leaf;
 import pxlgen.plugin.common.bsp.Partitioner;
@@ -19,14 +20,20 @@ import java.util.Random;
 @FunctionHandler
 public class Partition {
 
-    @Function
-    public void partition(ImageBuffer imageBuffer, float minSize, float maxSize, float minRectSizeF, float maxRectSizeF) {
+    @Function(description = "Partitions the image in varying spaces and fills them")
+    public void partition(ImageBuffer imageBuffer,
+                          @Name("minSize") float minSize,
+                          @Name("maxSize") float maxSize,
+                          @Name("minRectSize") float minRectSizeF,
+                          @Name("maxRectSize") float maxRectSizeF,
+                          @Name("rectProbability") float prob) {
         Partitioner partitioner = new Partitioner(imageBuffer.getWidth(), imageBuffer.getHeight(), (int) minSize, (int) maxSize);
         Leaf[] leaves = partitioner.partition();
         Random random = new Random();
         int minRectSize = (int) minRectSizeF;
         int maxRectSize = (int) maxRectSizeF;
         for (Leaf l : leaves) {
+            if (random.nextFloat() > prob) continue;
             int min = minRectSize;
             if (min <= 0)
                 min = l.getWidth() + min;
@@ -35,7 +42,7 @@ public class Partition {
                 max = l.getWidth() + max;
             int width = min;
             if (min != max)
-                    width += random.nextInt(max - min);
+                width += random.nextInt(max - min);
             min = minRectSize;
             if (min <= 0)
                 min = l.getHeight() + min;
@@ -47,12 +54,22 @@ public class Partition {
                 height += random.nextInt(max - min);
             int x = l.getX() + (l.getWidth() - width) / 2;
             int y = l.getY() + (l.getHeight() - height) / 2;
-            imageBuffer.drawRect(Color.WHITE, x, y, x + width, y + height);
+            if (x == 0){
+                x += 1;
+                width -= 1;
+            }
+            if (y == 0){
+                y += 1;
+                height -= 1;
+            }
+            imageBuffer.drawRect(Color.WHITE, x, y, x + width - 1, y + height - 1);
         }
     }
 
-    @Function
-    public void partition(ImageBuffer imageBuffer, float minSize, float maxSize) {
-        partition(imageBuffer, minSize, maxSize, 0, 0);
+    @Function(description = "Partitions the image in varying spaces")
+    public void partition(ImageBuffer imageBuffer,
+                          @Name("minSize") float minSize,
+                          @Name("maxSize") float maxSize) {
+        partition(imageBuffer, minSize, maxSize, 0, 0, 1);
     }
 }

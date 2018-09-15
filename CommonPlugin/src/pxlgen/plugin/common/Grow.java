@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 import java.awt.*;
@@ -16,8 +17,8 @@ import java.awt.*;
 @FunctionHandler
 public class Grow {
 
-    @Function
-    public void grow(ImageBuffer imageBuffer, float radius) {
+    @Function(description = "Expands all areas by an amount")
+    public void grow(ImageBuffer imageBuffer, @Name("amount") float radius) {
         int radiusI = (int) radius;
         ImageBuffer tmp = new ImageBuffer(imageBuffer);
         tmp.eachPixel((c, x, y) -> {
@@ -32,7 +33,7 @@ public class Grow {
         imageBuffer.setFrom(tmp);
     }
 
-    @Function
+    @Function(description = "Expands all areas")
     public void grow(ImageBuffer imageBuffer) {
         grow(imageBuffer, 1);
     }

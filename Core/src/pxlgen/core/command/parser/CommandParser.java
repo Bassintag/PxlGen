@@ -12,36 +12,14 @@ import pxlgen.core.exception.UnexpectedTokenException;
  * @version 1.0
  * @since 29/04/2018
  */
-public class CommandParser {
-
-    private final CommandLexer lexer;
-
-    private CommandToken token;
+public class CommandParser extends Parser{
 
     public CommandParser(String input) {
-        this(new CommandLexer(input));
+        super(input);
     }
 
     public CommandParser(CommandLexer lexer) {
-        this.lexer = lexer;
-    }
-
-    private void next() throws CommandParsingException {
-        token = lexer.token();
-    }
-
-    private boolean found(CommandTokenType commandTokenType) throws CommandParsingException {
-        if (token.getType() != commandTokenType)
-            return false;
-        next();
-        return true;
-    }
-
-    private String expect(CommandTokenType commandTokenType) throws CommandParsingException {
-        String ret = token.getValue();
-        if (!found(commandTokenType))
-            throw new UnexpectedTokenException(commandTokenType, token);
-        return ret;
+        super(lexer);
     }
 
     private boolean bool() throws CommandParsingException {

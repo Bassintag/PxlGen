@@ -15,7 +15,7 @@ import pxlgen.core.image.ImageBuffer;
 @FunctionHandler
 public class Clear {
 
-    @Function
+    @Function(description = "Clears the image")
     public void clear(ImageBuffer buffer) {
         buffer.eachPixel((c) -> (null));
     }

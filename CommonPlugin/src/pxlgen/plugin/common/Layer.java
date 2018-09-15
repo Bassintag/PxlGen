@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 import java.awt.*;
@@ -24,15 +25,17 @@ public class Layer {
         layers = new HashMap<>();
     }
 
-    @Function
-    public void saveLayer(ImageBuffer buffer, String name) {
+    @Function(description = "Saves a layer with a name")
+    public void saveLayer(ImageBuffer buffer,
+                          @Name("layerName") String name) {
         if (layers.containsKey(name))
             layers.remove(name);
         layers.put(name, buffer.clone());
     }
 
-    @Function
-    public void paintLayer(ImageBuffer buffer, String name) {
+    @Function(description = "Paint a layer")
+    public void paintLayer(ImageBuffer buffer,
+                           @Name("layerName") String name) {
         if (layers.containsKey(name)) {
             ImageBuffer layer = layers.get(name);
             buffer.eachPixel((c, x, y) -> {
@@ -42,8 +45,12 @@ public class Layer {
         }
     }
 
-    @Function
-    public void paintLayer(ImageBuffer buffer, String name, float red, float green, float blue) {
+    @Function(description = "Paint a layer with a color")
+    public void paintLayer(ImageBuffer buffer,
+                           @Name("layerName") String name,
+                           @Name("red") float red,
+                           @Name("green") float green,
+                           @Name("blue") float blue) {
         Color color = new Color(red, green, blue);
         if (layers.containsKey(name)) {
             ImageBuffer layer = layers.get(name);
@@ -51,13 +58,26 @@ public class Layer {
         }
     }
 
-    @Function
-    public void multiplyLayer(ImageBuffer buffer, String name) {
+    @Function(description = "Multiply a layer")
+    public void multiplyLayer(ImageBuffer buffer,
+                              @Name("layerName") String name) {
         if (layers.containsKey(name)) {
             ImageBuffer layer = layers.get(name);
             buffer.eachPixel((c, x, y) -> {
                 Color color = layer.getAt(x, y);
                 return (color == null ? null : c);
+            });
+        }
+    }
+
+    @Function(description = "Substract a layer")
+    public void substractLayer(ImageBuffer buffer,
+                               @Name("layerName") String name) {
+        if (layers.containsKey(name)) {
+            ImageBuffer layer = layers.get(name);
+            buffer.eachPixel((c, x, y) -> {
+                Color color = layer.getAt(x, y);
+                return color == null ? c : null;
             });
         }
     }

@@ -3,6 +3,7 @@ package pxlgen.plugin.common;
 import pxlgen.core.Direction;
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 /**
@@ -15,8 +16,10 @@ import pxlgen.core.image.ImageBuffer;
 @FunctionHandler
 public class Nudge {
 
-    @Function
-    public void nudge(ImageBuffer imageBuffer, Direction direction, float factor) {
+    @Function(description = "Translates the image in a direction by an amount")
+    public void nudge(ImageBuffer imageBuffer,
+                      @Name("direction") Direction direction,
+                      @Name("amount") float factor) {
         ImageBuffer tmp = imageBuffer.clone();
         int factorI = (int) factor;
         tmp.eachPixel((c, x, y) -> imageBuffer.getAt(
@@ -26,8 +29,9 @@ public class Nudge {
         imageBuffer.setFrom(tmp);
     }
 
-    @Function
-    public void nudge(ImageBuffer imageBuffer, Direction direction) {
+    @Function(description = "Translates the image in a direction by 1")
+    public void nudge(ImageBuffer imageBuffer,
+                      @Name("direction") Direction direction) {
         nudge(imageBuffer, direction, 1);
     }
 }

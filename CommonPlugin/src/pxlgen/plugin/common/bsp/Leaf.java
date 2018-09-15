@@ -37,12 +37,7 @@ public class Leaf {
         if (hasSplit())
             return false;
         boolean splitH;
-        if (width > height && width >= 1.25 * height)
-            splitH = false;
-        else if (height > width && height >= 1.25 * width)
-            splitH = true;
-        else
-            splitH = new Random().nextFloat() < 0.5;
+        splitH = (width <= height || !(width >= 1.25 * height)) && (height > width && height >= 1.25 * width || new Random().nextFloat() < 0.5);
         int max = (splitH ? height : width) - minSize;
         if (max <= minSize)
             return false;

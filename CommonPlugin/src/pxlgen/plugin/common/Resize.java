@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 /**
@@ -29,13 +30,16 @@ public class Resize {
             int destX = minX + x;
             int destY = minY + y;
             if (destX >= 0 && destX < dest.getWidth())
-                dest.setAt(c, destX, destY);
+                dest.setAt(destX, destY, c);
             return c;
         });
     }
 
-    @Function
-    public void resize(ImageBuffer imageBuffer, float widthF, float heightF, boolean stretch) {
+    @Function(description = "Resizes the image by stretching or not")
+    public void resize(ImageBuffer imageBuffer,
+                       @Name("width") float widthF,
+                       @Name("height") float heightF,
+                       @Name("streatch") boolean stretch) {
         int width = (int) widthF;
         int height = (int) heightF;
         ImageBuffer buffer = new ImageBuffer(width, height);
@@ -46,8 +50,10 @@ public class Resize {
         imageBuffer.setFrom(buffer);
     }
 
-    @Function
-    public void resize(ImageBuffer imageBuffer, float width, float height) {
+    @Function(description = "Resize the image by stretching")
+    public void resize(ImageBuffer imageBuffer,
+                       @Name("width") float width,
+                       @Name("Height") float height) {
         resize(imageBuffer, width, height, true);
     }
 }

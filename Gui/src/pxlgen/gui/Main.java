@@ -3,11 +3,19 @@ package pxlgen.gui;
 import pxlgen.core.Pxlgen;
 import pxlgen.core.exception.InvalidCommandException;
 import pxlgen.core.exception.InvalidPluginException;
+import pxlgen.core.function.Function;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * pxlgen.gui.Main.java created for PxlGen
@@ -27,6 +35,14 @@ public class Main extends JFrame {
         new Main(new Pxlgen()).setVisible(true);
     }
 
+    private Function getMatchingFunction() {
+        String text = inputField.getText();
+        Function[] matching = app.getMatchingFunction(text);
+        if (matching.length > 0)
+            return matching[0];
+        return null;
+    }
+
     private Main(Pxlgen app) {
         this.app = app;
 
@@ -41,6 +57,40 @@ public class Main extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         inputField = new JTextField();
+        inputField.setFocusTraversalKeysEnabled(false);
+        inputField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == '\t') {
+                    Function f = getMatchingFunction();
+                    if (f != null) {
+                        inputField.setText(f.getDomain() + "." + f.getName() + "()");
+                        inputField.setCaretPosition(inputField.getText().length() - 1);
+                    }
+                }
+            }
+        });
+        inputField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                onChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                onChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                onChange();
+            }
+
+            private void onChange() {
+                imageComponent.addMatchingFunctions(inputField.getText());
+                imageComponent.repaint();
+            }
+        });
         inputField.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,9 +118,12 @@ public class Main extends JFrame {
             BufferedReader reader = new BufferedReader(fileReader);
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.length() == 0)
+                line = line.trim();
+                if (line.length() == 0 || line.startsWith("#"))
                     continue;
                 app.run(line);
+                imageComponent.clearMessages();
+                imageComponent.addMessage(line);
                 imageComponent.refreshImage();
                 Thread.sleep(200);
             }

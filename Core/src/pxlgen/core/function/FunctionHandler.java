@@ -32,7 +32,9 @@ public class FunctionHandler {
                 String name = annotation.name();
                 if (name.length() == 0)
                     name = m.getName();
-                functions.add(new Function(instance, domain, name, m));
+                Function f = new Function(instance, domain, name, annotation.description(), m);
+                System.out.println("Found function: " + f.toString());
+                functions.add(f);
             }
         }
     }

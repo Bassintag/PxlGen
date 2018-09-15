@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 import java.awt.*;
@@ -17,8 +18,8 @@ import java.util.Random;
 @FunctionHandler
 public class Gradient {
 
-    @Function
-    public void horizontalGradient(ImageBuffer imageBuffer, float noiseFactor) {
+    @Function(description = "Draws a centered horizontal gradient with noise controlled by a factor")
+    public void horizontalGradient(ImageBuffer imageBuffer, @Name("factor") float noiseFactor) {
         Random random = new Random();
         imageBuffer.eachPixel((c, x, y) -> {
             float relY = ((float) y + 0.5f) / imageBuffer.getHeight();
@@ -29,13 +30,13 @@ public class Gradient {
         });
     }
 
-    @Function
+    @Function(description = "Draws a centered horizontal gradient with noise")
     public void horizontalGradient(ImageBuffer imageBuffer) {
         horizontalGradient(imageBuffer, 1);
     }
 
-    @Function
-    public void verticalGradient(ImageBuffer imageBuffer, float noiseFactor) {
+    @Function(description = "Draws a centered vertical gradient with noise controlled by a factor")
+    public void verticalGradient(ImageBuffer imageBuffer, @Name("factor") float noiseFactor) {
         Random random = new Random();
         imageBuffer.eachPixel((c, x, y) -> {
             float relX = ((float) x + 0.5f) / imageBuffer.getWidth();
@@ -46,12 +47,12 @@ public class Gradient {
         });
     }
 
-    @Function
+    @Function(description = "Draws a centered vertical gradient with noise")
     public void verticalGradient(ImageBuffer imageBuffer) {
         verticalGradient(imageBuffer, 1);
     }
 
-    @Function
+    @Function(description = "Draws a centered radial gradient with noise controlled by a factor")
     public void radialGradient(ImageBuffer imageBuffer, float noiseFactor) {
         Random random = new Random();
         imageBuffer.eachPixel((c, x, y) -> {
@@ -64,7 +65,7 @@ public class Gradient {
         });
     }
 
-    @Function
+    @Function(description = "Draws a centered radial gradient with noise")
     public void radialGradient(ImageBuffer imageBuffer) {
         radialGradient(imageBuffer, 1);
     }

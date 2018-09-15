@@ -1,5 +1,6 @@
 package pxlgen.core.function;
 
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 import pxlgen.core.util.TypeUtils;
 
@@ -19,22 +20,28 @@ import java.util.List;
  */
 public class Function {
 
-    private final String domain;
-
-    private final String name;
-
-    private final Method run;
-
+    private final String     domain;
+    private final String     name;
+    private final String     description;
+    private final Method     run;
     private final Class<?>[] paramTypes;
+    private final String[]   paramNames;
+    private final Object     instance;
 
-    private final Object instance;
-
-    public Function(Object instance, String domain, String name, Method run) {
+    public Function(Object instance, String domain, String name, String description, Method run) {
         this.domain = domain;
         this.instance = instance;
         this.name = name;
         this.run = run;
+        this.description = description;
         paramTypes = run.getParameterTypes();
+        paramNames = Arrays.stream(run.getParameters()).map(p -> {
+            Name annotation = p.getAnnotation(Name.class);
+            if (annotation == null) {
+                return null;
+            }
+            return annotation.value().length() == 0 ? null : annotation.value();
+        }).toArray(String[]::new);
     }
 
     public boolean isCalleableBy(FunctionCall call) {
@@ -64,5 +71,36 @@ public class Function {
 
     public String getName() {
         return name;
+    }
+
+    public Class<?>[] getParamTypes() {
+        return paramTypes;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String[] getParamNames() {
+        return paramNames;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder ret = new StringBuilder();
+        if (domain != null)
+            ret.append(domain).append(".");
+        ret.append(name).append("(");
+        for (int i = 1; i < paramTypes.length; i += 1) {
+            if (i > 1)
+                ret.append(", ");
+            String name = paramTypes[i].toString();
+            if (name.contains(".")) {
+                name = name.substring(name.lastIndexOf(".") + 1);
+            }
+            ret.append(name);
+        }
+        ret.append(")");
+        return ret.toString();
     }
 }

@@ -6,17 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Function.java created for PxlGen
+ * Name.java created for PxlGen
  *
  * @author Antoine
  * @version 1.0
- * @since 22/04/2018
+ * @since 14/09/2018
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Function {
+@Target(ElementType.PARAMETER)
+public @interface Name {
 
-    String name() default "";
-
-    String description() default "";
+    String value() default "";
 }

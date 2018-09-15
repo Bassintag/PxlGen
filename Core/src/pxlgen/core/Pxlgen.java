@@ -1,7 +1,9 @@
 package pxlgen.core;
 
 import pxlgen.core.command.Command;
+import pxlgen.core.command.PartialCommand;
 import pxlgen.core.command.parser.CommandParser;
+import pxlgen.core.command.parser.PartialCommandParser;
 import pxlgen.core.exception.*;
 import pxlgen.core.function.Function;
 import pxlgen.core.function.FunctionCall;
@@ -73,6 +75,26 @@ public class Pxlgen {
             }
         }
         return ret;
+    }
+
+    public List<Function> getFunctions() {
+        List<Function> ret = new ArrayList<>();
+        for (Plugin p : plugins) {
+            for (Function f : p.getFunctions()) {
+                ret.add(f);
+            }
+        }
+        return ret;
+    }
+
+    public Function[] getMatchingFunction(String text) {
+        PartialCommand partialCommand;
+        try {
+            partialCommand = new PartialCommandParser(text).parse();
+        } catch (CommandParsingException e) {
+            return new Function[0];
+        }
+        return getFunctions().stream().filter(partialCommand::match).toArray(Function[]::new);
     }
 
     public void run(String cmd) throws InvalidCommandException {

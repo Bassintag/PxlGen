@@ -59,7 +59,7 @@ public class Command {
         for (int i = 0; i < params.size(); i += 1) {
             if (i > 0)
                 ret.append(", ");
-            ret.append(params.get(i));
+            ret.append(params.get(i).toString());
         }
         ret.append(")");
         return ret.toString();

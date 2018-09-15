@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 
 /**
@@ -14,8 +15,9 @@ import pxlgen.core.image.ImageBuffer;
 @FunctionHandler
 public class Shrink {
 
-    @Function
-    public void shrink(ImageBuffer imageBuffer, float radius) {
+    @Function(description = "Reduces all areas by an amount")
+    public void shrink(ImageBuffer imageBuffer,
+                       @Name("amount") float radius) {
         int radiusI = (int) radius;
         ImageBuffer tmp = new ImageBuffer(imageBuffer);
         tmp.eachPixel((c, x, y) -> {
@@ -30,7 +32,7 @@ public class Shrink {
         imageBuffer.setFrom(tmp);
     }
 
-    @Function
+    @Function(description = "Reduces all areas")
     public void shrink(ImageBuffer imageBuffer) {
         shrink(imageBuffer, 1);
     }

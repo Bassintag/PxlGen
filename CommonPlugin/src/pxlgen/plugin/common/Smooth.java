@@ -2,6 +2,7 @@ package pxlgen.plugin.common;
 
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
+import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
 import pxlgen.core.util.ColorUtil;
 import pxlgen.plugin.common.cellularValidator.ICellularValidator;
@@ -34,8 +35,12 @@ public class Smooth {
         return validators.get(name);
     }
 
-    @Function
-    public void smooth(ImageBuffer imageBuffer, float iterations, float threshold, float radius, String algorithm) {
+    @Function(description = "Smoothes the image n times with a threshold in a radius and using a specified algorithm")
+    public void smooth(ImageBuffer imageBuffer,
+                       @Name("iterations") float iterations,
+                       @Name("threshold") float threshold,
+                       @Name("radius") float radius,
+                       @Name("algorithm") String algorithm) {
         while (iterations > 0) {
             int radiusI = (int) radius;
             int thresholdI = (int) threshold;
@@ -62,18 +67,24 @@ public class Smooth {
         }
     }
 
-    @Function
-    public void smooth(ImageBuffer imageBuffer, float iterations, float threshold, String algorithm) {
+    @Function(description = "Smoothes the image n times using a threshold and a specified algorithm")
+    public void smooth(ImageBuffer imageBuffer,
+                       @Name("iterations") float iterations,
+                       @Name("threshold") float threshold,
+                       @Name("algorithm") String algorithm) {
         smooth(imageBuffer, iterations, threshold, 1, algorithm);
     }
 
-    @Function
-    public void smooth(ImageBuffer imageBuffer, float iterations, float threshold) {
+    @Function(description = "Smoothes the image n times using a threshold")
+    public void smooth(ImageBuffer imageBuffer,
+                       @Name("iterations") float iterations,
+                       @Name("threshold") float threshold) {
         smooth(imageBuffer, iterations, threshold, "moore");
     }
 
-    @Function
-    public void smooth(ImageBuffer imageBuffer, float threshold) {
+    @Function(description = "Smoothes the image using a threshold")
+    public void smooth(ImageBuffer imageBuffer,
+                       @Name("threshold") float threshold) {
         smooth(imageBuffer, 1, threshold);
     }
 

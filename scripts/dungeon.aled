@@ -1,0 +1,23 @@
+resize(48, 48)
+partition(6, 9)
+invert()
+saveLayer("partition")
+
+clear()
+invert()
+noise(0.5)
+smooth(2, 3, "vn")
+smooth(2, 4, "moore")
+saveLayer("fatmask")
+
+multiplyLayer("partition")
+smooth(1, 1, "moore")
+saveLayer("fatwalls")
+
+paintLayer("partition")
+invert()
+substractLayer("fatwalls")
+
+paint(1, 0, 0)
+tunnel(2)
+floodfill()

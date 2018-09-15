@@ -112,7 +112,7 @@ public class Main extends JFrame {
     }
 
     private void loadScript() {
-        File file = new File("scripts/script.aled");
+        File file = new File("scripts/island");
         try {
             FileReader fileReader = new FileReader(file);
             BufferedReader reader = new BufferedReader(fileReader);

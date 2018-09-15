@@ -1,10 +1,10 @@
 package pxlgen.plugin.common;
 
-import javafx.util.Pair;
 import pxlgen.core.annotation.Function;
 import pxlgen.core.annotation.FunctionHandler;
 import pxlgen.core.annotation.Name;
 import pxlgen.core.image.ImageBuffer;
+import pxlgen.core.util.Pair;
 import pxlgen.plugin.common.areas.Area;
 
 import java.awt.*;
@@ -36,8 +36,9 @@ public class Tunnel {
 
     private Pair<Point, Point> canConnect(ImageBuffer imageBuffer, Area area, Point p, float distance) {
         for (Point ap : area) {
-            if ((ap.x != p.x && ap.y != p.y) || ap.distance(p) > distance)
+            if ((ap.x != p.x && ap.y != p.y) || ap.distance(p) > distance) {
                 continue;
+            }
             return new Pair<>(p, ap);
         }
         return null;
